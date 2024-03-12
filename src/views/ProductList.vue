@@ -1,49 +1,49 @@
 <!-- 商品列表頁面，利用卡片的形式陳列商品並顯示商品名稱、商品圖片、敘述、加入購物車按鈕及可以增加減少購買數量 -->
 
 <script>
-// import { mapActions } from "pinia";
-import { mapActions } from "pinia";
-import CountButton from "@/components/CountButton.vue";
-// import productData from '@/assets/json/MOCK_DATA.json';
-import iconShoppingCart from "@/assets/images/icon-shopping-cart.svg";
-import iconMesh from "@/assets/images/icon-mesh.png";
-import iconMeshGrey from "@/assets/images/icon-mesh-grey.png";
-import iconList from "@/assets/images/icon-list.png";
-import iconListGrey from "@/assets/images/icon-list-grey.png";
-import { useShoppingCart } from "@/stores/shoppingCart";
+  // import { mapActions } from "pinia";
+  import { mapActions } from "pinia";
+  import CountButton from "@/components/CountButton.vue";
+  // import productData from '@/assets/json/MOCK_DATA.json';
+  import iconShoppingCart from "@/assets/images/icon-shopping-cart.svg";
+  import iconMesh from "@/assets/images/icon-mesh.png";
+  import iconMeshGrey from "@/assets/images/icon-mesh-grey.png";
+  import iconList from "@/assets/images/icon-list.png";
+  import iconListGrey from "@/assets/images/icon-list-grey.png";
+  import { useShoppingCart } from "@/stores/shoppingCart";
 
-export default {
-  components: {
-    CountButton,
-  },
-  data() {
-    return {
-      productData: [],
-      imgIcon: {
-        iconShoppingCart,
-        iconMesh,
-        iconMeshGrey,
-        iconList,
-        iconListGrey,
-      },
-      switchDisplay: true,
-    };
-  },
-
-  mounted() {
-    this.fetchData();
-  },
-
-  methods: {
-    ...mapActions(useShoppingCart, ["addCart"]),
-
-    fetchData() {
-      fetch("./src/assets/json/MOCK_DATA.json")
-        .then((res) => res.json())
-        .then((res) => (this.productData = res));
+  export default {
+    components: {
+      CountButton,
     },
-  },
-};
+    data() {
+      return {
+        productData: [],
+        imgIcon: {
+          iconShoppingCart,
+          iconMesh,
+          iconMeshGrey,
+          iconList,
+          iconListGrey,
+        },
+        switchDisplay: true,
+      };
+    },
+
+    mounted() {
+      this.fetchData();
+    },
+
+    methods: {
+      ...mapActions(useShoppingCart, ["addCart",'existProduct']),
+
+      fetchData() {
+        fetch("./src/assets/json/MOCK_DATA.json")
+          .then((res) => res.json())
+          .then((res) => (this.productData = res));
+      },
+    },
+  };
 </script>
 <template>
   <div class="w-full px-5">
@@ -82,7 +82,7 @@ export default {
         <button @click="addCart(product)" type="button"
           class="flex justify-center items-center gap-x-2 bg-[#50468c] text-white rounded-b-lg px-4 py-1">
           <img :src="imgIcon.iconShoppingCart" alt="購物車圖示" width="20" />
-          <span>加入購物車</span>
+          <span> {{ existProduct(product)? '已加入購物車' : '加入購物車' }}</span>
         </button>
       </div>
     </section>
@@ -109,7 +109,8 @@ export default {
           <div class="flex flex-col gap-y-4">
             <CountButton class="w-[150px] h-[35px]" :quantity="product.quantity"
               @update="(newValue) => (product.quantity = newValue)" />
-            <button type="button" @click="addCart(product)" class="flex justify-center items-center gap-x-2 bg-[#50468c] text-white rounded-full px-4 py-1 cursor-pointer md:p-0 w-[150px]">
+            <button type="button" @click="addCart(product)"
+              class="flex justify-center items-center gap-x-2 bg-[#50468c] text-white rounded-full px-4 py-1 cursor-pointer md:p-0 w-[150px]">
               <img :src="imgIcon.iconShoppingCart" class="py-1" alt="購物車圖示" width="20" />
               <span>加入購物車</span>
             </button>

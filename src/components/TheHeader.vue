@@ -1,6 +1,8 @@
 <!-- 頁首組件 -->
 
 <script>
+import { mapState } from 'pinia';
+import { useShoppingCart } from '@/stores/shoppingCart';  
 import iconShoppingCart from '@/assets/images/icon-shopping-cart.svg';
 
 export default {
@@ -8,6 +10,10 @@ export default {
     return {
       iconShoppingCart,
     };
+  },
+
+  computed:{
+    ...mapState(useShoppingCart,['cartData',]),
   },
   methods: {
 
@@ -24,7 +30,7 @@ export default {
       <RouterLink to="/shopping-cart" title="前往購物車頁面(跳轉頁面)">
         <img class="w-[30px]" :src="iconShoppingCart" alt="購物車圖示" />
       </RouterLink>
-      <div class="absolute top-0 z-10 right-[17px] w-[16px] h-[16px] flex justify-center items-center rounded-full bg-red-600">0</div>
+      <div class="absolute top-0 z-10 right-[17px] w-[16px] h-[16px] flex justify-center items-center rounded-full bg-red-600">{{ cartData.length }}</div>
     </div>
   </header>
 </template>
